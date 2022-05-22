@@ -32,16 +32,22 @@ function useCopy(
   } else {
     const selection = window.getSelection();
     const range = document.createRange();
+    toCopy.style.top = '0';
+    toCopy.style.left = '0';
+    toCopy.style.position = 'fixed';
+    document.body.appendChild(toCopy);
     range.selectNodeContents(toCopy);
     selection?.removeAllRanges();
     selection?.addRange(range);
     try {
       document.execCommand('copy');
+      document.body.removeChild(toCopy);
       selection?.removeAllRanges();
       if (successCallback) {
         successCallback();
       }
     } catch (error) {
+      document.body.removeChild(toCopy);
       if (failCallback) {
         failCallback(error);
       }
