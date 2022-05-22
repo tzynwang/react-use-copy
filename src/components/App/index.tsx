@@ -1,7 +1,6 @@
 import React, { memo, useRef } from 'react';
 import resolveConfig from 'tailwindcss/resolveConfig';
 import useCopy from '@Hooks/useCopy';
-import styleResetter from '@Tools/style-resetter';
 import tailwindConfig from './../../../tailwind.config';
 
 function App(): React.ReactElement {
@@ -9,24 +8,24 @@ function App(): React.ReactElement {
   const listRef = useRef<HTMLDivElement | null>(null);
   const spanRef = useRef<HTMLSpanElement | null>(null);
   const multiStylesSpanRef = useRef<HTMLDivElement | null>(null);
+  const lineBreakRef = useRef<HTMLDivElement | null>(null);
   const { theme } = resolveConfig(tailwindConfig);
 
   // Functions
   const handleCopyText = (): void => {
-    useCopy('copy pure text', () => console.info('pure text copy success'));
+    useCopy('copy pure text');
   };
   const handleCopyLink = (): void => {
-    useCopy(listRef.current, () =>
-      console.info('list of anchors copy success')
-    );
+    useCopy(listRef.current);
   };
   const handleCopySpan = (): void => {
-    const toCopy = styleResetter(spanRef.current);
-    useCopy(toCopy, () => console.info('span copy success'));
+    useCopy(spanRef.current);
   };
   const handleCopyMultiStyles = (): void => {
-    const toCopy = styleResetter(multiStylesSpanRef.current);
-    useCopy(toCopy, () => console.info('multi-styles span copy success'));
+    useCopy(multiStylesSpanRef.current);
+  };
+  const handleCopyLineBreak = (): void => {
+    useCopy(lineBreakRef.current);
   };
 
   // Main
@@ -46,6 +45,9 @@ function App(): React.ReactElement {
           </button>
           <button onClick={handleCopyMultiStyles} className="btn">
             copy span with multiple styles
+          </button>
+          <button onClick={handleCopyLineBreak} className="btn btn-secondary">
+            copy span with line break
           </button>
         </div>
         <div ref={listRef}>
@@ -102,6 +104,15 @@ function App(): React.ReactElement {
           >
             multiple parts.
           </span>
+        </div>
+        <div ref={lineBreakRef}>
+          <div className="ResetBgColor" style={{ whiteSpace: 'pre-line' }}>
+            {'Now'}
+            {'\n'}
+            {'we have some'}
+            {'\n'}
+            {'line break.'}
+          </div>
         </div>
       </div>
     </div>

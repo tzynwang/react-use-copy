@@ -1,6 +1,4 @@
 function styleResetter(raw: unknown) {
-  if (raw === null) return;
-
   const toFormat = raw as HTMLElement;
   const clone = toFormat.cloneNode(true) as HTMLElement;
 
@@ -13,7 +11,7 @@ function styleResetter(raw: unknown) {
     clone.childNodes.forEach((child) => {
       const typedChild = child as HTMLElement;
       if (typedChild.classList.contains('ResetBgColor')) {
-        typedChild.style.backgroundColor = 'transparent';
+        typedChild.style.backgroundColor = '#fff';
       }
     });
   }

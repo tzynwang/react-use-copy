@@ -3,8 +3,6 @@ function useCopy(
   successCallback?: () => void,
   failCallback?: (error: any) => void
 ): void {
-  if (target === null) return;
-
   const toCopy =
     typeof target === 'string' ? (target as string) : (target as HTMLElement);
 
@@ -20,37 +18,32 @@ function useCopy(
     try {
       document.execCommand('copy');
       document.body.removeChild(textArea);
-      if (successCallback) {
-        successCallback();
-      }
-    } catch (error) {
+      if (successCallback) successCallback();
+    } catch (error: any) {
       document.body.removeChild(textArea);
-      if (failCallback) {
-        failCallback(error);
-      }
+      if (failCallback) failCallback(error);
     }
   } else {
+    const container = document.createElement('div');
+    container.style.backgroundColor = '#fff';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.position = 'fixed';
+    container.appendChild(toCopy.cloneNode(true));
+    document.body.appendChild(container);
     const selection = window.getSelection();
     const range = document.createRange();
-    toCopy.style.top = '0';
-    toCopy.style.left = '0';
-    toCopy.style.position = 'fixed';
-    document.body.appendChild(toCopy);
-    range.selectNodeContents(toCopy);
+    range.selectNodeContents(container);
     selection?.removeAllRanges();
     selection?.addRange(range);
     try {
       document.execCommand('copy');
-      document.body.removeChild(toCopy);
+      document.body.removeChild(container);
       selection?.removeAllRanges();
-      if (successCallback) {
-        successCallback();
-      }
+      if (successCallback) successCallback();
     } catch (error) {
-      document.body.removeChild(toCopy);
-      if (failCallback) {
-        failCallback(error);
-      }
+      document.body.removeChild(container);
+      if (failCallback) failCallback(error);
     }
   }
 }
