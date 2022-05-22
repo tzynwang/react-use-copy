@@ -1,18 +1,18 @@
-'use strict'
+'use strict';
 
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const TerminalLogPlugin = require('./webpack/TerminalLogPlugin')
-const alias = require('./alias')
-const packageJson = require('./../package.json')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerminalLogPlugin = require('./webpack/TerminalLogPlugin');
+const alias = require('./alias');
+const packageJson = require('./../package.json');
 
-const SCRIPT_REG = /\.(ts|js)x?$/
-const CSS_REG = /\.css$/
-const CSS_MODULE_REG = /\.module\.css$/
-const SCSS_MODULE_REG = /\.module\.scss$/
+const SCRIPT_REG = /\.(ts|js)x?$/;
+const CSS_REG = /\.css$/;
+const CSS_MODULE_REG = /\.module\.css$/;
+const SCSS_MODULE_REG = /\.module\.scss$/;
 
-const HOST = process.env.HOST || 'localhost'
-const PORT = process.env.PORT || 3000
+const HOST = process.env.HOST || 'localhost';
+const PORT = process.env.PORT || 3000;
 
 module.exports = {
   entry: path.resolve(__dirname, '..', './src/index.tsx'),
@@ -46,7 +46,11 @@ module.exports = {
       {
         test: CSS_REG,
         exclude: CSS_MODULE_REG,
-        use: ['style-loader', 'css-loader']
+        use: [
+          'style-loader',
+          { loader: 'css-loader', options: { importLoaders: 1 } },
+          'postcss-loader'
+        ]
       },
       {
         test: CSS_MODULE_REG,
@@ -63,7 +67,7 @@ module.exports = {
                 localIdentName: '[local]__[hash:base64:5]',
                 localIdentContext: path.resolve(__dirname, 'src'),
                 localIdentHashSalt: 'react-fox',
-                exportLocalsConvention: 'camelCaseOnly',
+                exportLocalsConvention: 'camelCaseOnly'
               }
             }
           }
@@ -84,10 +88,11 @@ module.exports = {
                 localIdentName: '[local]__[hash:base64:5]',
                 localIdentContext: path.resolve(__dirname, 'src'),
                 localIdentHashSalt: 'react-fox',
-                exportLocalsConvention: 'camelCaseOnly',
+                exportLocalsConvention: 'camelCaseOnly'
               }
             }
-          },{
+          },
+          {
             loader: 'sass-loader'
           }
         ]
@@ -111,4 +116,4 @@ module.exports = {
     filename: 'bundle.[fullhash].js',
     path: path.resolve(__dirname, '..', './build')
   }
-}
+};
