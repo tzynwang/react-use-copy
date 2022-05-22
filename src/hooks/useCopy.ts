@@ -9,12 +9,22 @@ function useCopy(
     typeof target === 'string' ? (target as string) : (target as HTMLElement);
 
   if (typeof toCopy === 'string') {
+    const textArea = document.createElement('textarea');
+    textArea.style.top = '0';
+    textArea.style.left = '0';
+    textArea.style.position = 'fixed';
+    document.body.appendChild(textArea);
+    textArea.value = toCopy;
+    textArea.focus();
+    textArea.select();
     try {
-      navigator.clipboard.writeText(toCopy);
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
       if (successCallback) {
         successCallback();
       }
-    } catch (error: any) {
+    } catch (error) {
+      document.body.removeChild(textArea);
       if (failCallback) {
         failCallback(error);
       }
