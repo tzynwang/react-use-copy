@@ -2,5 +2,6 @@ const path = require('path');
 
 module.exports = {
   '@Components': path.resolve(__dirname, '..', './src/components'),
-  '@Hooks': path.resolve(__dirname, '..', './src/hooks')
+  '@Hooks': path.resolve(__dirname, '..', './src/hooks'),
+  '@Tools': path.resolve(__dirname, '..', './src/tools')
 };
