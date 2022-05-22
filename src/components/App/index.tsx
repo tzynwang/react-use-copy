@@ -7,10 +7,12 @@ function App(): React.ReactElement {
 
   // Functions
   const handleCopyText = (): void => {
-    useCopy('copy pure text', () => console.info('success'));
+    useCopy('copy pure text', () => console.info('pure text copy success'));
   };
   const handleCopyLink = (): void => {
-    useCopy(listRef.current, () => console.info('success'));
+    useCopy(listRef.current, () =>
+      console.info('list of anchors copy success')
+    );
   };
 
   // Main
