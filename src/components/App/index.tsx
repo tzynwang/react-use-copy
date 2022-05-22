@@ -1,9 +1,15 @@
 import React, { memo, useRef } from 'react';
+import resolveConfig from 'tailwindcss/resolveConfig';
 import useCopy from '@Hooks/useCopy';
+import styleResetter from '@Tools/style-resetter';
+import tailwindConfig from './../../../tailwind.config';
 
 function App(): React.ReactElement {
   // States
   const listRef = useRef<HTMLDivElement | null>(null);
+  const spanRef = useRef<HTMLSpanElement | null>(null);
+  const multiStylesSpanRef = useRef<HTMLDivElement | null>(null);
+  const { theme } = resolveConfig(tailwindConfig);
 
   // Functions
   const handleCopyText = (): void => {
@@ -14,18 +20,32 @@ function App(): React.ReactElement {
       console.info('list of anchors copy success')
     );
   };
+  const handleCopySpan = (): void => {
+    const toCopy = styleResetter(spanRef.current);
+    useCopy(toCopy, () => console.info('span copy success'));
+  };
+  const handleCopyMultiStyles = (): void => {
+    const toCopy = styleResetter(multiStylesSpanRef.current);
+    useCopy(toCopy, () => console.info('multi-styles span copy success'));
+  };
 
   // Main
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col">
         <div className="text-5xl text-center font-bold">copy testing</div>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4 justify-center">
           <button onClick={handleCopyText} className="btn btn-secondary">
             copy pure text
           </button>
           <button onClick={handleCopyLink} className="btn btn-primary">
             copy list of anchors
+          </button>
+          <button onClick={handleCopySpan} className="btn">
+            copy span with bold text
+          </button>
+          <button onClick={handleCopyMultiStyles} className="btn">
+            copy span with multiple styles
           </button>
         </div>
         <div ref={listRef}>
@@ -52,6 +72,36 @@ function App(): React.ReactElement {
               </a>
             </li>
           </ul>
+        </div>
+        <div className="text-center">
+          <span ref={spanRef} className="font-bold ResetBgColor">
+            Just a span element copy target 😏
+          </span>
+        </div>
+        <div ref={multiStylesSpanRef}>
+          <span className="ResetBgColor">A sentence </span>
+          <span
+            style={{
+              // @ts-ignore: Unreachable code error
+              color: theme?.colors?.sky[800],
+              // @ts-ignore: Unreachable code error
+              backgroundColor: theme?.colors?.sky[200]
+            }}
+          >
+            with different background-color
+          </span>
+          <span className="ResetBgColor"> in </span>
+          <span
+            style={{
+              // @ts-ignore: Unreachable code error
+              color: theme?.colors?.rose[800],
+              // @ts-ignore: Unreachable code error
+              backgroundColor: theme?.colors?.rose[200],
+              textDecoration: 'line-through'
+            }}
+          >
+            multiple parts.
+          </span>
         </div>
       </div>
     </div>
